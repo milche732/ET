@@ -15,27 +15,26 @@ namespace ET.Web.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class IdentityController : ControllerBase
+    public class UsersController : ControllerBase
     {
-        private readonly ILogger<IdentityController> _logger;
+        private readonly ILogger<UsersController> _logger;
         private readonly IMediator _mediator;
 
-        public IdentityController(ILogger<IdentityController> logger, IMediator mediator)
+        public UsersController(ILogger<UsersController> logger, IMediator mediator)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         [HttpGet]
-        [Route("{name}")]
+        [Route("{id}")]
         [ProducesResponseType(typeof(UserDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-
-        public async Task<ActionResult> Get(string name)
+        public async Task<ActionResult> Get(int id)
         {
-            if (string.IsNullOrEmpty(name)) return BadRequest();
-            var user = await _mediator.Send(new QueryUserCommand(name));
+            if (id <= 0) return BadRequest();
+            var user = await _mediator.Send(new QueryUserCommand(id));
             if (user != null)
                 return Ok(user);
             else
@@ -43,25 +42,39 @@ namespace ET.Web.Controllers
         }
 
         [HttpGet]
-        [Route("groups")]
-        [ProducesResponseType(typeof(IEnumerable<GroupDto>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult> GetGroups()
+        [Route("find/{name}")]
+        [ProducesResponseType(typeof(UserDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult> Get(string name)
         {
-            var groups = await _mediator.Send(new QueryAllGroupsCommand());
-            return Ok(groups);
+            if (string.IsNullOrEmpty(name)) return BadRequest();
+            var user = await _mediator.Send(new QueryUserCommand(name));
+            if (user != null)
+                return Ok(user);
+            else
+                return NotFound();
         }
 
         [HttpGet]
-        [Route("users")]
+        [Route("check/{name}")]
+        public async Task<IActionResult> Check(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return Ok(true);
+            var user = await _mediator.Send(new QueryUserCommand(name));
+            return Ok(user == null);
+        }
+
+        [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<UserDto>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult> GetUsers()
+        public async Task<ActionResult> Get()
         {
             var user = await _mediator.Send(new QueryAllUsersCommand());
             return Ok(user);
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UserDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         public async Task<ActionResult> CreateNew([FromBody]CreateUserCommand command)
@@ -70,17 +83,14 @@ namespace ET.Web.Controllers
                 return BadRequest(this.ModelState);
             try
             {
-                int userId = await _mediator.Send(command);
-                return Ok(userId);
+                int id = await _mediator.Send(command);
+                var user = await _mediator.Send(new QueryUserCommand(id));
+                return Ok(user);
             }
             catch (UserNameAlreadyExistsException ex)
             {
                 return Conflict(ex.Message);
-            }
-            catch (GroupNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            }           
         }
     }
 }

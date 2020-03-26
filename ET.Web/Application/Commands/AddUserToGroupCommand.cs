@@ -8,12 +8,15 @@ using System.Threading.Tasks;
 
 namespace ET.Web.Application.Commands
 {
-    public class CreateUserCommand : IRequest<int>
+    public class AddUserToGroupCommand : IRequest<bool>
     {
         [DataMember]
         [Required]
-        [StringLength(50, MinimumLength = 3)]
-        public string Name { get; set; }        
-       
+        [Range(1, 1000000)]
+        public int UserId { get; set; }
+        
+        [DataMember]
+        [Range(1, 1000000)]
+        public int GroupId { get; set; }
     }
 }

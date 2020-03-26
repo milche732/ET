@@ -32,14 +32,17 @@ namespace ET.Web.Application.Query
                                 u.Id
                                 ,u.Name
                                 ,u.DateCreated
-                            from users u                             
+                                ,u.InActive
+                            from users u   
+                                where u.InActive =  0
 
                            select g.Id
                                 ,g.Name
                                 ,ug.UserId
                             from groups g  
                             join user_in_group ug on g.Id = ug.GroupId        
-                            join users u on u.Id = ug.UserId"
+                            join users u on u.Id = ug.UserId
+                            where g.InActive = 0 and ug.InActive = 0"
                             );
 
                 users = await results.ReadAsync<UserDto>();

@@ -26,7 +26,10 @@ namespace ET.Infrastructure.Repositories
         }
         public async Task<User> Get(int id)
         {
-            return await identityContext.Users.FindAsync(id);
+            var user =  await identityContext.Users.FindAsync(id);
+            if(user != null)
+              await identityContext.Entry(user).Collection(x => x.Groups).LoadAsync();
+            return user;
         }
 
         public async Task<User> Get(string name)

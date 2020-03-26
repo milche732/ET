@@ -1,0 +1,44 @@
+<alert-dialog></alert-dialog>
+<h2>Catalog</h2>
+<br />
+<div class="alert alert-danger" *ngIf="Error!=null && Error.message!=null" role="alert">
+  {{Error.message}}
+  {{Error.error}}
+</div>
+<table class="table table-striped">
+  <caption>List of users</caption>
+
+  <thead>
+    <tr>
+      <th scope="col">User #</th>
+      <th scope="col">Name</th>
+      <th scope="col">Date</th>
+      <th scope="col">Groups</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr *ngFor="let user of UserList">
+
+      <th scope="row">
+        {{user.id}}
+      </th>
+      <td scope="row">
+        {{user.name}}
+
+      </td>
+      <td scope="row">
+        {{user.dateCreated}}
+
+      </td>
+      <td scope="row">
+        <span *ngFor="let group of user.groups">{{group.name}}&nbsp;</span>
+      </td>
+      <td align="right">
+        <a [routerLink]="" queryParamsHandling="preserve" (click)="deleteUserDialog(user)">Delete</a>&nbsp;
+        <a [routerLink]="['/edit', user.id]">Edit</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

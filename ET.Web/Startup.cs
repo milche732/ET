@@ -53,6 +53,8 @@ namespace ET.Web
             services.AddTransient<IdentitySeed>();
 
             services.AddTransient(typeof(IPipelineBehavior<CreateUserCommand, int>), typeof(TransactionBehaviour<CreateUserCommand, int>));
+            services.AddTransient(typeof(IPipelineBehavior<AddUserToGroupCommand, bool>), typeof(TransactionBehaviour<AddUserToGroupCommand, bool>));
+            services.AddTransient(typeof(IPipelineBehavior<RemoveUserFromGroupCommand, bool>), typeof(TransactionBehaviour<RemoveUserFromGroupCommand, bool>));
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

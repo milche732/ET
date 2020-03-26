@@ -28,5 +28,30 @@ namespace ET.Infrastructure.Repositories
         {
             await identityContext.UserInGroup.AddAsync(userInGroup);
         }
+
+        public async Task<UserInGroup> GetAsync(int userId, int groupId)
+        {
+            UserInGroup userInGroup = await identityContext.UserInGroup.FindAsync(userId, groupId);
+            return userInGroup;
+        }
+
+        public void Delete(UserInGroup userInGroup)
+        {
+            identityContext.UserInGroup.Remove(userInGroup);
+        }
+
+        public void Update(UserInGroup userInGroup)
+        {
+            identityContext.UserInGroup.Update(userInGroup);
+        }
+
+        public async Task CreateOrUpdate(UserInGroup userInGroup)
+        {
+            var group = await GetAsync(userInGroup.UserId, userInGroup.GroupId);
+            if (group == null)
+                await CreateAsync(userInGroup);
+            else
+                Update(userInGroup);
+        }
     }
 }

@@ -11,10 +11,24 @@ namespace ET.Con
     {
         static async Task Main(string[] args)
         {
-            //DbContextOptionsBuilder options = new DbContextOptionsBuilder();
-            //options.UseSqlServer("");
-            using (IdentityContext context = new IdentityContext())
+            using (IdentityContext context = new IdentityContext(@"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=IdentityDB;Integrated Security=SSPI;"))
             {
+                //await context.Database.EnsureDeletedAsync();
+                //await context.Database.EnsureCreatedAsync();
+
+                Console.WriteLine(context.Database.GenerateCreateScript());
+              
+               
+                IUserRepository userRepository = new UserRepository(context);
+                User user = await userRepository.Get(1);
+                /*IGroupRepository groupRepository = new GroupRepository(context);
+                Group group = await groupRepository.Get(1);
+                */
+                IUserInGroupRepository userInGroupRepository = new UserInGroupRepository(context);
+                
+                var res = await userInGroupRepository.GetAsync(1, 1);
+                Console.ReadKey();
+                /*
                 await context.Database.EnsureDeletedAsync();
                 await context.Database.EnsureCreatedAsync();
                 try
@@ -45,7 +59,7 @@ namespace ET.Con
                     context.Database.RollbackTransaction();
                 }
                 //Console.WriteLine(context.Database.GenerateCreateScript());
-
+                */
             }
         }
     }

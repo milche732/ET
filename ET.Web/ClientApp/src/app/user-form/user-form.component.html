@@ -1,0 +1,82 @@
+<h2 *ngIf="user!=null">Edit user</h2>
+<h2 *ngIf="user==null">Create new user</h2>
+<br />
+
+<div class="col-md-8">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmitForm()">
+    <div>
+      <div>
+        <label for="">User #</label>
+        <input type="text" class="form-control" formControlName="id" readonly="readonly">        
+      </div>
+      <div>
+        <div>
+          <label for="">Name</label>
+          <input type="text" class="form-control" readonly="{{user==null?'':'readonly'}}" formControlName="name"
+                 [ngClass]="{'is-invalid':(name.invalid && (name.dirty || name.touched))}" />
+          <div class="invalid-feedback" *ngIf="id.invalid && id.errors.idTaken">
+            *User # is already in use
+          </div>
+          <div class="invalid-feedback">
+            *Valid  name is required.
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+    <br />
+    <div class="row" *ngIf="user==null">
+      <div class="col-8" style="margin-left:-10px;">
+
+        &nbsp;
+        <button type="submit" [disabled]="userForm.valid == false" class="btn btn-primary">
+          Save
+        </button>
+        &nbsp;
+        <button [routerLink]="['/list']" type="button" class="btn btn-secondary">
+          Back
+        </button>
+        <span *ngIf="success" style="color:green;">&nbsp;Operation successfull</span>
+      </div>
+
+    </div>
+  </form>
+</div>
+<br />
+
+<h2 *ngIf="user!=null">Groups management</h2>
+
+<div class="col-md-8">
+  <div *ngIf="user != null" class="row">
+
+    <div class="col-sm-6">
+      <div *ngFor="let group of user.groups" style="margin-bottom:5px">
+        <input type="text" style="width:200px" disabled value="{{group.name}}" /> &nbsp;
+        <a [routerLink]="" queryParamsHandling="preserve" (click)="removeGroup(group)">Remove</a>
+      </div>
+      <div *ngIf="user == null || user.groups.length == 0 " style="font-style:italic">No groups</div>
+    </div>
+
+    <div class="col-sm-6">
+      <select style="width:200px" [(ngModel)]="selectedValue">
+        <option *ngFor="let group of allGroups" [ngValue]="group">{{group.name}}</option>
+      </select> &nbsp;
+      <a [routerLink]="" queryParamsHandling="preserve" (click)="addGroup(selectedValue)">Add</a>
+
+    </div>
+  </div>
+
+
+</div>
+
+<div class="col-md-8" style="margin-top:30px" *ngIf="user!=null">
+  <div class="row">
+    <div class="col-8">
+      <button [routerLink]="['/list']" type="button" class="btn btn-secondary">
+        Back
+      </button>
+    </div>
+  </div>
+</div>

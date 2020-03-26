@@ -14,18 +14,26 @@ namespace ET.Infrastructure
 {
     public class IdentityContext : DbContext, IUnitOfWork
     {
+        private string connectionString;
         private IDbContextTransaction _currentTransaction;
         public const string DEFAULT_SCHEMA = "identity";
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=IdentityDB;Integrated Security=SSPI;");
+            if (!string.IsNullOrEmpty(connectionString))
+                optionsBuilder.UseSqlServer(connectionString);
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<UserInGroup> UserInGroup { get; set; }
         public bool HasActiveTransaction => _currentTransaction != null;
 
-        public IdentityContext() { 
+        public IdentityContext()
+        {
+        }
+
+        public IdentityContext(string connection)
+        {
+            connectionString = connection;
         }
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
         {
@@ -33,7 +41,7 @@ namespace ET.Infrastructure
             //Database.EnsureCreatedAsync().Wait();
         }
 
-        
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,7 +49,7 @@ namespace ET.Infrastructure
             modelBuilder.HasSequence("group_sequence").IncrementsBy(1);
             modelBuilder.ApplyConfiguration(new GroupEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new GroupMemberEntityTypeConfiguration());          
+            modelBuilder.ApplyConfiguration(new GroupMemberEntityTypeConfiguration());
         }
 
         public async Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)
@@ -117,7 +125,8 @@ namespace ET.Infrastructure
         {
             orderConfiguration.ToTable("users");
             orderConfiguration.Property(b => b.Name).HasMaxLength(50);
-            orderConfiguration.Property(b => b.Id).ValueGeneratedNever(); 
+            orderConfiguration.Property(b => b.Id).ValueGeneratedNever();
+           // orderConfiguration.HasMany<UserInGroup>().WithOne();
         }
     }
 
@@ -128,8 +137,20 @@ namespace ET.Infrastructure
             orderConfiguration.ToTable("user_in_group");
 
             orderConfiguration.HasKey(x => new { x.GroupId, x.UserId });
-            orderConfiguration.HasOne<Group>();
-            orderConfiguration.HasOne<User>();
+
+            orderConfiguration
+                 .HasOne<User>(sc => sc.User)
+                 .WithMany(s => s.Groups)
+                 .HasForeignKey(sc => sc.UserId);
+
+            orderConfiguration
+               .HasOne<Group>(sc => sc.Group)
+               .WithMany(s => s.Users)
+               .HasForeignKey(sc => sc.GroupId);
+
+            //orderConfiguration.HasOne<Group>().WithMany(x => x.Users).HasForeignKey(x => x.GroupId);
+            //orderConfiguration.HasOne<User>().WithMany(x => x.Groups).HasForeignKey(x => x.UserId);
+
         }
     }
 }

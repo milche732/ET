@@ -27,9 +27,13 @@ namespace ET.Web.Application.Query
             UserDto user = null;
             using (IDbConnection db = new SqlConnection(options.Value.ConnectionString))
             {
-                var results = await db.QueryMultipleAsync(
-                          @"select u.Name
+                SqlMapper.GridReader results = null;
+                if (!string.IsNullOrEmpty(request.Name))
+                {
+                    results = await db.QueryMultipleAsync(
+                              @"select u.Name
                                 ,u.DateCreated
+                                ,u.Id
                             from users u                             
                            where u.Name = @name
 
@@ -38,8 +42,23 @@ namespace ET.Web.Application.Query
                             from groups g  
                             join user_in_group ug on g.Id = ug.GroupId        
                             join users u on u.Id = ug.UserId
-                            where u.Name = @name", new { name =  request.Name });
+                            where u.Name = @name", new { name = request.Name });
+                }
+                else
+                {
+                    results = await db.QueryMultipleAsync(
+                            @"select u.Name
+                                ,u.DateCreated
+                                ,u.Id
+                            from users u                             
+                           where u.Id = @userId
 
+                           select g.Id
+                                ,g.Name  
+                            from groups g  
+                            join user_in_group ug on g.Id = ug.GroupId        
+                            where ug.UserId = @userId and ug.InActive = 0", new { userId = request.Id });
+                }
                 user = await results.ReadFirstOrDefaultAsync<UserDto>();
                 if(user!=null)
                     user.Groups = await results.ReadAsync<GroupDto>();

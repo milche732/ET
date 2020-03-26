@@ -31,7 +31,7 @@ namespace ET.Web.Application.Query
                           @"select
                                 g.Id
                                 ,g.Name
-                            from groups g"                             
+                            from groups g where g.InActive = 0"                             
                             );
 
                 groups = await results.ReadAsync<GroupDto>();
