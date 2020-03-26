@@ -4,7 +4,7 @@ Next technologies and patterns where used
 * Angular 8 
 * EF Core (for writing)
 * Dapper (for reading)
-* CQRS/DDD
+* MediatR/CQRS/DDD
 
 This project uses Code First approach and generate DB and seed it wiht data on the first launch. However you can find snapshots of DB at DB folder.
 
