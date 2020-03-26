@@ -14,7 +14,8 @@ Download or clone project to your local folder. Open and build solution ET.sln. 
 However, in case any issues with frontend side please go to ET.Web\ClientApp\ and run "npm install", after run "ng build" to be sure that Angular compiles properly.
 
 ### Docker
-In order to run application inside docker container follow this
+This process builds and runs app inside docker container, you need to have only docker on your local PC, everythin rest will be downloaded inside the docker.
+In order to run application inside docker follow this
 1. clone project and navigate to the root
 2. run "docker-compose build"
 3. run "docker-compose up"
