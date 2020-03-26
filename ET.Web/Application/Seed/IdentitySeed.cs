@@ -28,7 +28,7 @@ namespace ET.Web.Application.Seed
         {
             //identityContext.Database.EnsureDeleted();
             if (identityContext.Database.EnsureCreated())
-            {
+            {                
                 List<Group> groups = new List<Group>();
                 foreach (string gName in new string[] { "Group A", "Group B" })
                 {
@@ -42,13 +42,12 @@ namespace ET.Web.Application.Seed
                 foreach (string gName in new string[] { "Peter", "Linda", "Mark", "Jim", "Megan" })
                 {
                     int userId = await userRepository.NextId();
-                    User user = User.New(userId, gName);
-                    await userRepository.CreateAsync(user);
+                    
+                    var user = await userRepository.CreateAsync(User.New(userId, gName));
 
                     int i = r.Next(0, 1);
 
-                    var userInGroup = user.AddToGroup(groups[i]);
-                    await userInGroupRepository.CreateAsync(userInGroup);
+                    user.AddToGroup(groups[i]);                    
                 }
 
                 await userRepository.UnitOfWork.SaveEntitiesAsync();

@@ -9,7 +9,7 @@ namespace ET.Domain.Domains
     public interface IUserRepository:IRepository<User>
     {
         Task<int> NextId();
-        Task CreateAsync(User user);        
+        Task<User> CreateAsync(User user);        
         Task<User> Get(int id);
         Task<User> Get(string name);
     }

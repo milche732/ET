@@ -47,9 +47,11 @@ namespace ET.Infrastructure.Repositories
             return (int)result.Value;
         }
 
-        public async Task CreateAsync(User user)
+        public async Task<User> CreateAsync(User user)
         {
-            await identityContext.Users.AddAsync(user);
+            var res = await identityContext.Users.AddAsync(user);
+            await res.Collection(x => x.Groups).LoadAsync();
+            return res.Entity;
         }
     }
 }
