@@ -15,9 +15,10 @@ However, in case any issues with frontend side please go to ET.Web\ClientApp\ an
 
 ### Docker
 In order to run application inside docker container follow this
-1. docker-compose build
-2. docker-compose up
-3. open http://127.0.0.1:5002
+1. clone project and navigate to the root
+2. run "docker-compose build"
+3. run "docker-compose up"
+4. open http://127.0.0.1:5002
 
 ### MSSQL 
  Open ET.Web\appsettings.json and edit "ConnectionString": "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=IdentityDB;Integrated Security=SSPI;",
