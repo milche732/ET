@@ -1,4 +1,4 @@
-## This is a demo project: Users and Groups management.
+# Users and Groups management (demo)
 Next technologies and patterns where used
 * .NET Core
 * Angular 8 
