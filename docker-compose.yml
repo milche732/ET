@@ -5,23 +5,27 @@ networks:
     driver: bridge
 
 services:
+   mssql2017:
+    image: 'mcr.microsoft.com/mssql/server:2017-latest'    
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=yourStrong(!)Password    
+    networks:
+      - app-tier   
    eintech:
     image: 'eintech:latest'
     build:
       context: .
       dockerfile: ET.Web/Dockerfile
     environment:
-      - ConnectionString=data source=mssql2017;initial catalog=IdentityDB;User Id=sa;Password=asd123; 
+      - ConnectionString=Server=mssql2017;Database=IdentityDB;User Id=sa;Password=yourStrong(!)Password; 
     ports:
       - "5002:80"
     networks:
       - app-tier
-   mssql2017:
-    image: 'mcr.microsoft.com/mssql/server:2017-latest'    
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=asd123    
-    networks:
-      - app-tier   
+    depends_on:
+      - mssql2017
+
+   
 volumes:
     eintech_data:
