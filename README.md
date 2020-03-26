@@ -6,7 +6,7 @@ Next technologies and patterns where used
 * Dapper (for reading)
 * MediatR/CQRS/DDD
 
-This project uses Code First approach and generate DB and seed it wiht data on the first launch. However you can find snapshots of DB at DB folder.
+This project uses Code First approach and generate DB and seed it with data on the first launch. However you can find snapshots of DB at DB folder.
 
 ### How to run
 Download or clone project to your local folder. Open and build solution ET.sln. VS should download all dependencies for backend and client side. 
