@@ -1,4 +1,3 @@
-# ET
 ## This is a demo project: Users and Groups management.
 Next technologies and patterns where used
 * .NET Core
