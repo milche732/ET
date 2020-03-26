@@ -22,11 +22,11 @@ import {
 })
 export class UserFormComponent implements OnInit {
   userForm: FormGroup;
-  private id: FormControl;
-  private name: FormControl;
-  private user: User;
-  private allGroups: IGroup[];
-  private success: boolean;
+  public id: FormControl;
+  public name: FormControl;
+  public user: User;
+  public allGroups: IGroup[];
+  public success: boolean;
   @Output() userCreated = new EventEmitter<User>();
   @Output() userUpdated = new EventEmitter<User>();
   constructor(private activatedRoute: ActivatedRoute,

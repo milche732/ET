@@ -1,0 +1,27 @@
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+   eintech:
+    image: 'eintech:latest'
+    build:
+      context: .
+      dockerfile: ET.Web/Dockerfile
+    environment:
+      - ConnectionString=data source=mssql2017;initial catalog=IdentityDB;User Id=sa;Password=asd123; 
+    ports:
+      - "5002:80"
+    networks:
+      - app-tier
+   mssql2017:
+    image: 'mcr.microsoft.com/mssql/server:2017-latest'    
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=asd123    
+    networks:
+      - app-tier   
+volumes:
+    eintech_data:
