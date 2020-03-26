@@ -9,7 +9,7 @@ namespace ET.Web.Application.Queries.Dto
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime DateCreated { get; set; }
+        public string DateCreated { get; set; }        
         public IEnumerable<GroupDto> Groups { get; set; }
     }
 }

@@ -27,6 +27,7 @@ namespace ET.Web.Application.Query
             IEnumerable<UserDto> users = null;
             using (IDbConnection db = new SqlConnection(options.Value.ConnectionString))
             {
+                string name = $"%{request.Name}%";
                 var results = await db.QueryMultipleAsync(
                           @"select
                                 u.Id
@@ -34,7 +35,7 @@ namespace ET.Web.Application.Query
                                 ,u.DateCreated
                                 ,u.InActive
                             from users u   
-                                where u.InActive =  0
+                                where u.InActive =  0 and u.Name like @name
 
                            select g.Id
                                 ,g.Name
@@ -42,8 +43,10 @@ namespace ET.Web.Application.Query
                             from groups g  
                             join user_in_group ug on g.Id = ug.GroupId        
                             join users u on u.Id = ug.UserId
-                            where g.InActive = 0 and ug.InActive = 0"
-                            );
+                            where g.InActive = 0 
+                                    and ug.InActive = 0
+                                    and u.Name like @name",
+                            new { name = name });
 
                 users = await results.ReadAsync<UserDto>();
                 

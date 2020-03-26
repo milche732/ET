@@ -41,6 +41,21 @@ namespace ET.Web.Controllers
                 return NotFound("User not found.");
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult> Delete(int id)
+        {
+            if (id <= 0) return BadRequest();
+
+            if(await _mediator.Send(new DeleteUserCommand(id)))            
+                return Ok();
+            else
+                return NotFound();
+        }
+
         [HttpGet]
         [Route("find/{name}")]
         [ProducesResponseType(typeof(UserDto), (int)HttpStatusCode.OK)]
@@ -69,7 +84,16 @@ namespace ET.Web.Controllers
         [ProducesResponseType(typeof(IEnumerable<UserDto>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> Get()
         {
-            var user = await _mediator.Send(new QueryAllUsersCommand());
+            var user = await _mediator.Send(new QueryAllUsersCommand(string.Empty));
+            return Ok(user);
+        }
+
+        [HttpGet]
+        [Route("findany/{name}")]
+        [ProducesResponseType(typeof(IEnumerable<UserDto>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult> Find(string name)
+        {
+            var user = await _mediator.Send(new QueryAllUsersCommand(name));
             return Ok(user);
         }
 

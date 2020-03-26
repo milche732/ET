@@ -10,8 +10,10 @@ namespace ET.Web.Application.Query
 {
     public class QueryAllUsersCommand : IRequest<IEnumerable<UserDto>>
     {
-        public QueryAllUsersCommand()
+        public string Name { get; set; }
+        public QueryAllUsersCommand(string name)
         {
+            Name = name;
         }
     }
 }

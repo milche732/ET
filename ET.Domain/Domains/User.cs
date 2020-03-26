@@ -35,7 +35,7 @@ namespace ET.Domain.Domains
             }
             else
             {
-                uig  = UserInGroup.New(Id, group.Id);
+                uig = UserInGroup.New(Id, group.Id);
                 Groups.Add(uig);
             }
             this.AddDomainEvent(new UserToGroupAdded(Name, group.Name));
@@ -53,7 +53,7 @@ namespace ET.Domain.Domains
         public void SetInactive()
         {
             InActive = true;
-            //fire domain event here
+            this.AddDomainEvent(new UserDeactivated(this.Id, this.Name));            
         }
     }
 }
