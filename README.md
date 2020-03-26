@@ -14,6 +14,7 @@ However, in case any issues with frontend side please go to ET.Web\ClientApp\ an
 
 ### MSSQL 
  Open ET.Web\appsettings.json and edit "ConnectionString": "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=IdentityDB;Integrated Security=SSPI;",
+ Current DB, is not optimised, no indexes were used. However User.Name can be indexed for proper performance. 
 
 
 
