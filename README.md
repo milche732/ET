@@ -7,7 +7,7 @@ Next technologies and patterns where used
 * MediatR/CQRS/DDD
 * Docker
 
- This project uses Code First approach and generate DB and seed it with data on the first launch. However you can find snapshots of DB at DB folder.
+ This project uses Code First approach and generates DB with data on the first launch. However you can find snapshots of DB at DB folder.
 
 ### How to run
 It's highly recommnded to use docker to run the app. See Docker section. Any way you can build it by your own using VS 2019.
