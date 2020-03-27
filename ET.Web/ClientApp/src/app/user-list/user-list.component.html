@@ -36,7 +36,7 @@
         <span *ngFor="let group of user.groups">{{group.name}}&nbsp;</span>
       </td>
       <td align="right">
-        <a [routerLink]="" queryParamsHandling="preserve" (click)="deleteUserDialog(user)">Delete</a>&nbsp;
+        <!--a [routerLink]="" queryParamsHandling="preserve" (click)="deleteUserDialog(user)">Delete</a-->&nbsp;
         <a [routerLink]="['/edit', user.id]">Edit</a>
       </td>
     </tr>
