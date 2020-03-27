@@ -40,3 +40,6 @@ GO
 
 CREATE INDEX [IX_user_in_group_UserId] ON [user_in_group] ([UserId]);
 GO
+
+CREATE INDEX [IX_users_Name] ON [users] ([Name]);
+GO

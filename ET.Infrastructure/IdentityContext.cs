@@ -124,6 +124,7 @@ namespace ET.Infrastructure
         public void Configure(EntityTypeBuilder<User> orderConfiguration)
         {
             orderConfiguration.ToTable("users");
+            orderConfiguration.HasIndex(b => b.Name);
             orderConfiguration.Property(b => b.Name).HasMaxLength(50);
             orderConfiguration.Property(b => b.Id).ValueGeneratedNever();
            // orderConfiguration.HasMany<UserInGroup>().WithOne();
