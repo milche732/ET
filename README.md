@@ -24,7 +24,7 @@ In order to run application inside docker follow this
 
 ### MSSQL 
  Open ET.Web\appsettings.json and edit "ConnectionString": "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=IdentityDB;Integrated Security=SSPI;",
- Current DB, is not optimised, no indexes were used. However User.Name can be indexed for proper performance. 
+ Current DB, is not optimised, no indexes were used. On;y User.Name was indexed. 
 
 
 
